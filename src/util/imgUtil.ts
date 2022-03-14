@@ -49,6 +49,14 @@ export const zoom = (ratio: number, targetImgInfo: ImgInfoIto, offsetSize?: Offs
     const curWidth = targetImgInfo.curWidth;
     // const curHeight = TARGET_IMG_INFO.curHeight;
     let zoomRatio = curWidth * ratio / targetImgInfo.realWidth;
+    //Snap to 100% zoom when we pass over it
+    const curRatio = curWidth / targetImgInfo.realWidth;
+    if ((curRatio < 1 && zoomRatio > 1) || (curRatio > 1 && zoomRatio < 1)) {
+        //set zoom ratio to 100%
+        zoomRatio = 1;
+        //reduce snap offset ratio accordingly
+        ratio = 1 / curRatio;
+    }
     const newWidth = targetImgInfo.realWidth * zoomRatio;
     const newHeight = targetImgInfo.realHeight * zoomRatio;
     const left = targetImgInfo.left + (offsetSize.offsetX - offsetSize.offsetX * ratio);
